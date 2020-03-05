@@ -1,0 +1,12 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "extends": ["@schematics/angular"],
+  "schematics": {
+    "component": {
+      "factory": "../dist/component",
+      "aliases": ["c"],
+      "description": "Create an Angular component.",
+      "schema": "./component/schema.json"
+    }
+  }
+}

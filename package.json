@@ -1,0 +1,32 @@
+{
+  "name": "@ngxp/schematics",
+  "version": "0.0.0",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json -w",
+    "test": "npm run build && jasmine dist/**/*_spec.js",
+    "start": "schematics .:component"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^9.0.3",
+    "@angular-devkit/schematics": "^9.0.3",
+    "@schematics/angular": "^9.0.3",
+    "lodash": "^4.17.15",
+    "ts-morph": "^7.0.0",
+    "typescript": "~3.7.4"
+  },
+  "devDependencies": {
+    "@angular-devkit/schematics-cli": "^0.900.3",
+    "@types/jasmine": "~3.5.0",
+    "@types/lodash": "^4.14.149",
+    "@types/node": "^12.11.1",
+    "jasmine": "^3.5.0"
+  }
+}
