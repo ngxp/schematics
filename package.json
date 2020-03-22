@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "description": "A blank schematics",
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+        "build": "tsc -p tsconfig.json",
     "dev": "tsc -p tsconfig.json -w",
     "test": "npm run build && jasmine dist/**/*_spec.js",
-    "start": "schematics .:component"
+        "sandbox:init": "cd sandbox && npm install --save-dev ../ && npm link ../",
+        "sandbox:clean": "git checkout HEAD -- sandbox && git clean -f -d sandbox"
   },
   "keywords": [
     "schematics"
