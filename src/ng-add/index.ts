@@ -1,7 +1,7 @@
 import { JsonObject } from '@angular-devkit/core';
 import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
-import { updateWorkspace } from '@nrwl/workspace';
+import { updateJsonInTree, updateWorkspace } from '@nrwl/workspace';
 import { addPackageJsonDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import latestVersion from 'latest-version';
 import { from, Observable } from 'rxjs';
@@ -12,8 +12,9 @@ export default function (): Rule {
     return (tree: Tree, context: SchematicContext) => {
         return chain([
             addPackageJsonDependencies(),
+            removePrettier(),
+            setDefaultCollection(),
             installDependencies(),
-            setDefaults()
         ])(tree, context);
     };
 }
@@ -39,7 +40,20 @@ function installDependencies(): Rule {
     };
 }
 
-function setDefaults(): Rule {
+function removePrettier(): Rule {
+    return chain([
+        (tree: Tree) => {
+            tree.delete('.prettierignore');
+            tree.delete('.prettierrc');
+        },
+        updateJsonInTree('package.json', json => {
+            delete json.devDependencies.prettier;
+            return json;
+        })
+    ]);
+}
+
+function setDefaultCollection(): Rule {
     return updateWorkspace(workspace => {
         workspace.extensions.schematics = workspace.extensions.schematics || {};
 
