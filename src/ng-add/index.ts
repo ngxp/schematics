@@ -6,12 +6,13 @@ import { addPackageJsonDependency, NodeDependencyType } from '@schematics/angula
 import latestVersion from 'latest-version';
 import { from, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { isObject } from 'util';
+import { isNull, isObject } from 'util';
 
 export default function (): Rule {
     return (tree: Tree, context: SchematicContext) => {
         return chain([
             addPackageJsonDependencies(),
+            updateEditorconfig(),
             removePrettier(),
             setDefaultCollection(),
             installDependencies(),
@@ -37,6 +38,24 @@ function installDependencies(): Rule {
     return (tree: Tree, context: SchematicContext) => {
         context.addTask(new NodePackageInstallTask());
         return tree;
+    };
+}
+
+function updateEditorconfig(): Rule {
+    return (tree: Tree) => {
+        const fileBuffer = tree.read('.editorconfig');
+
+        if (isNull(fileBuffer)) {
+            return;
+        }
+
+        const editorconfig = fileBuffer.toString();
+        const updatedEditorconfig = editorconfig.replace(
+            /indent_size\s?=\s?\d/,
+            'indent_size = 4'
+        );
+
+        tree.overwrite('.editorconfig', updatedEditorconfig);
     };
 }
 
