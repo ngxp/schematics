@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "${workspaceFolder}/sandbox/node_modules/@angular/cli/bin/ng",
+            "cwd": "${workspaceFolder}/sandbox/",
+            "args": [
+                "generate",
+                "@ngxp/schematics:${input:pickSchematic}",
+                "${input:promptArg}",
+                "--dry-run"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        }
+    ],
+    "inputs": [
+        {
+            "id": "pickSchematic",
+            "description": "Select a Schematic",
+            "type": "pickString",
+            "options": [
+                "ng-add",
+                "component",
+                "library"
+            ]
+        },
+        {
+            "id": "promptArg",
+            "description": "Enter Argument...",
+            "type": "promptString"
+        }
+    ]
+}
