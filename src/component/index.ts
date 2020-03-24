@@ -1,8 +1,9 @@
 import { chain, externalSchematic, Rule, Tree } from '@angular-devkit/schematics';
 import { isUndefined, omit } from 'lodash';
 import { ClassDeclaration, ObjectLiteralExpression, Project, SourceFile } from 'ts-morph';
+import { ComponentSchema } from './schema';
 
-export default function (options: any): Rule {
+export default function (options: ComponentSchema): Rule {
     if (options.skipStyles) {
         options.inlineStyle = true;
     }
