@@ -1,12 +1,24 @@
 {
-  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
-  "extends": ["@schematics/angular"],
-  "schematics": {
-    "component": {
-      "factory": "../dist/component",
-      "aliases": ["c"],
-      "description": "Create an Angular component.",
-      "schema": "./component/schema.json"
+    "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+    "extends": [
+        "@schematics/angular"
+    ],
+    "schematics": {
+        "ng-add": {
+            "factory": "../dist/ng-add",
+            "aliases": [
+                "install"
+            ],
+            "description": "Add ngxp Schematics to the workspace.",
+            "schema": "./ng-add/schema.json"
+        },
+        "component": {
+            "factory": "../dist/component",
+            "aliases": [
+                "c"
+            ],
+            "description": "Create an Angular component.",
+            "schema": "./component/schema.json"
+        }
     }
-  }
 }
