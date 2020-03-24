@@ -19,6 +19,14 @@
             ],
             "description": "Create an Angular component.",
             "schema": "./component/schema.json"
+        },
+        "library": {
+            "factory": "./library",
+            "aliases": [
+                "lib"
+            ],
+            "description": "Create an Angular library.",
+            "schema": "./library/schema.json"
         }
     }
 }

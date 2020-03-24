@@ -2,7 +2,6 @@
     "$schema": "http://json-schema.org/schema",
     "id": "ngxp-schematics-component",
     "type": "object",
-    "description": "Creates a new generic component definition in the given or default project.",
     "properties": {
         "path": {
             "type": "string",
