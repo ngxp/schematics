@@ -5,7 +5,7 @@
     ],
     "schematics": {
         "ng-add": {
-            "factory": "../dist/ng-add",
+            "factory": "./ng-add",
             "aliases": [
                 "install"
             ],
@@ -13,7 +13,7 @@
             "schema": "./ng-add/schema.json"
         },
         "component": {
-            "factory": "../dist/component",
+            "factory": "./component",
             "aliases": [
                 "c"
             ],
