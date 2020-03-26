@@ -4,10 +4,10 @@ export interface ComponentSchema {
     name: string;
     inlineStyle?: boolean;
     inlineTemplate?: boolean;
-    viewEncapsulation?: "Emulated" | "Native" | "None" | "ShadowDom";
-    changeDetection?: "Default" | "OnPush";
+    viewEncapsulation?: 'Emulated' | 'Native' | 'None' | 'ShadowDom';
+    changeDetection?: 'Default' | 'OnPush';
     prefix?: string;
-    style?: "css" | "scss" | "sass" | "less" | "styl";
+    style?: 'css' | 'scss' | 'sass' | 'less' | 'styl';
     type?: string;
     skipStyles?: boolean;
     skipTests?: boolean;

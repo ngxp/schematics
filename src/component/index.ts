@@ -1,6 +1,7 @@
 import { chain, externalSchematic, Rule, Tree } from '@angular-devkit/schematics';
 import { isUndefined, omit } from 'lodash';
-import { ClassDeclaration, ObjectLiteralExpression, Project, SourceFile } from 'ts-morph';
+import { ClassDeclaration, ObjectLiteralExpression, SourceFile } from 'ts-morph';
+import { getFile } from '../utils/file-utils';
 import { ComponentSchema } from './schema';
 
 export default function (options: ComponentSchema): Rule {
@@ -14,10 +15,10 @@ export default function (options: ComponentSchema): Rule {
             const componentPath = getComponentPath(tree);
 
             if (isUndefined(componentPath)) {
-                return tree;
+                return;
             }
 
-            const componentFile = getComponentFile(tree, componentPath);
+            const componentFile = getFile(tree, componentPath);
 
             removeNamedImport(componentFile, '@angular/core', 'OnInit');
 
@@ -46,17 +47,11 @@ export default function (options: ComponentSchema): Rule {
 
 function getComponentPath(tree: Tree) {
     return tree.actions
-        .find(action => action.kind === 'c' && action.path.endsWith('.component.ts'))
-        ?.path;
-}
-
-function getComponentFile(tree: Tree, componentPath: string) {
-    const sourceText = tree.read(componentPath)!.toString('utf-8');
-    const project = new Project();
-    return project.createSourceFile(componentPath, sourceText);
+        .find(action => action.kind === 'c' && action.path.endsWith('.component.ts'))?.path;
 }
 
 function getComponentClass(file: SourceFile) {
+    // tslint:disable-next-line: no-non-null-assertion
     return file.getClasses().find(cls => cls.getName()!.endsWith('Component'));
 }
 

@@ -27,6 +27,16 @@
             ],
             "description": "Create an Angular library.",
             "schema": "./library/schema.json"
+        },
+        "ngrx-setup": {
+            "factory": "./ngrx-setup",
+            "description": "Add an ngrx config to a project.",
+            "schema": "./ngrx-setup/schema.json"
+        },
+        "ngrx": {
+            "factory": "./ngrx",
+            "description": "Add an ngrx feature state to a module.",
+            "schema": "./ngrx/schema.json"
         }
     }
 }

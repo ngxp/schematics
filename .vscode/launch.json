@@ -13,7 +13,7 @@
             "args": [
                 "generate",
                 "@ngxp/schematics:${input:pickSchematic}",
-                "${input:promptArg}",
+                // "${input:promptArg}",
                 "--dry-run"
             ],
             "skipFiles": [
@@ -29,7 +29,9 @@
             "options": [
                 "ng-add",
                 "component",
-                "library"
+                "library",
+                "ngrx-setup",
+                "ngrx"
             ]
         },
         {

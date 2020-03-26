@@ -12,5 +12,5 @@ export interface LibrarySchema {
     lazy?: boolean;
     parentModule?: string;
     tags?: string;
-    unitTestRunner?: "karma" | "jest" | "none";
+    unitTestRunner?: 'karma' | 'jest' | 'none';
 }

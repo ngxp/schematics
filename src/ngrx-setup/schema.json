@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "id": "ngxp-schematics-ngrx-setup",
+    "type": "object",
+    "properties": {
+        "module": {
+            "type": "string",
+            "description": "The path to NgModule where the feature state will be registered. The host directory will create/use the new state directory."
+        },
+        "skipFormat": {
+            "description": "Skip formatting of generated files.",
+            "type": "boolean",
+            "default": false
+        },
+        "skipPackageJson": {
+            "type": "boolean",
+            "default": false,
+            "description": "Do not update the package.json with NgRx dependencies."
+        }
+    }
+}
