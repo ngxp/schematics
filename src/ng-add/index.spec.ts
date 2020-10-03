@@ -1,3 +1,4 @@
+import { collectionName } from '../collection';
 import { readAngularJson } from '../utils/angular-json-utils';
 import { readFile } from '../utils/file-utils';
 import { readPackageJson } from '../utils/package-json-utils';
@@ -31,6 +32,13 @@ describe('ng-add', () => {
         const tree = await runSchematic('ng-add');
 
         const angularJson = readAngularJson(tree);
-        expect(angularJson.cli.defaultCollection).toBe('@ngxp/schematics');
+        expect(angularJson.cli.defaultCollection).toBe(collectionName);
+    });
+
+    it('sets scss as the default style extension for components', async () => {
+        const tree = await runSchematic('ng-add');
+
+        const angularJson = readAngularJson(tree);
+        expect(angularJson.schematics[`${collectionName}:component`].style).toBe('scss');
     });
 });

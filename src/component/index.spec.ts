@@ -21,7 +21,7 @@ describe('component', () => {
 
     it('creates a component', async () => {
         const tree = await runSchematic('component', options);
-        console.log(componentTsFilePath);
+
         expect(tree.exists(componentHtmlFilePath)).toBeTrue();
         expect(tree.exists(componentSpecFilePath)).toBeTrue();
         expect(tree.exists(componentTsFilePath)).toBeTrue();

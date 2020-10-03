@@ -4,6 +4,8 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { updateJsonInTree, updateWorkspace } from '@nrwl/workspace';
 import { NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { isNull, isObject } from 'lodash';
+import { collectionName } from '../collection';
+import { StyleExt } from '../utils/angular-json-utils';
 import { addPackageJsonDependency } from '../utils/package-json-utils';
 
 export default function (): Rule {
@@ -13,6 +15,7 @@ export default function (): Rule {
             updateEditorconfig(),
             removePrettier(),
             setDefaultCollection(),
+            setDefaultStyleExtension('scss'),
             installDependencies(),
         ])(tree, context);
     };
@@ -58,12 +61,27 @@ function removePrettier(): Rule {
 
 function setDefaultCollection(): Rule {
     return updateWorkspace(workspace => {
-        workspace.extensions.schematics = workspace.extensions.schematics || {};
-
         if (!isObject(workspace.extensions.cli)) {
             workspace.extensions.cli = {};
         }
 
-        (workspace.extensions.cli as JsonObject).defaultCollection = '@ngxp/schematics';
+        (workspace.extensions.cli as JsonObject).defaultCollection = collectionName;
+    });
+}
+
+function setDefaultStyleExtension(styleExt: StyleExt): Rule {
+    return updateWorkspace(workspace => {
+        if (!isObject(workspace.extensions.schematics)) {
+            workspace.extensions.schematics = {};
+        }
+
+        const schematics = workspace.extensions.schematics as JsonObject;
+        const componentSchematic = `${collectionName}:component`;
+        if (!isObject(schematics[componentSchematic])) {
+            schematics[componentSchematic] = {};
+        }
+
+        // tslint:disable-next-line: no-non-null-assertion
+        (schematics[componentSchematic] as JsonObject).style = styleExt;
     });
 }
