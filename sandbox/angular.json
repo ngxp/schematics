@@ -79,16 +79,14 @@
               "apps/sandbox/tsconfig.app.json",
               "apps/sandbox/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/sandbox/**"]
+            "exclude": ["**/node_modules/**", "!apps/sandbox/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/sandbox/jest.config.js",
-            "tsConfig": "apps/sandbox/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/sandbox/src/test-setup.ts"
+            "passWithNoTests": true
           }
         }
       }
@@ -115,7 +113,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": ["apps/sandbox-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/sandbox-e2e/**"]
+            "exclude": ["**/node_modules/**", "!apps/sandbox-e2e/**/*"]
           }
         }
       }
