@@ -94,12 +94,12 @@ export function removePropertyFromDecoratorArg(cls: ClassDeclaration, decoratorN
 }
 
 function removeProperty(obj: ObjectLiteralExpression, propertyName: string) {
-    const property = obj.getProperty(propertyName)
+    const property = obj.getProperty(propertyName);
 
     if (isUndefined(property)) {
         console.warn(`The object has no property called ${propertyName}`);
         return;
     }
 
-    property.remove()
+    property.remove();
 }

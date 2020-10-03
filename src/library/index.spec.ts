@@ -27,7 +27,7 @@ describe('library', () => {
         const tsconfig = readJsonFile(tree, 'tsconfig.base.json');
         expect(tsconfig.compilerOptions.paths[`${libraryModuleName}/testing`]).toEqual(
             [`${librarySrcPath}testing/index.ts`]
-        )
+        );
     });
 
     it('adds an exception for @…/…/testing to tslint.json', async () => {

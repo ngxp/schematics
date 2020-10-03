@@ -74,7 +74,7 @@ function updateComponentFile(componentName: string, update: ComponentFileUpdater
         tree.overwrite(componentPath, formattedComponentFile);
 
         return tree;
-    }
+    };
 }
 
 function getComponentPath(tree: Tree, componentName: string) {

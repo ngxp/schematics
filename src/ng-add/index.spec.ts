@@ -16,7 +16,7 @@ describe('ng-add', () => {
         const tree = await runSchematic('ng-add');
 
         const editorconfig = readFile(tree, '.editorconfig');
-        expect(editorconfig).toContain('indent_size = 4')
+        expect(editorconfig).toContain('indent_size = 4');
     });
 
     it('removes prettier', async () => {

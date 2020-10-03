@@ -19,7 +19,7 @@ function createWorkspaceTree(workspaceDirectory: string): Tree {
     const tree = Tree.empty();
 
     getWorkspaceFiles(workspaceDirectory)
-        .forEach(({ path: filePath, content }) => tree.create(filePath, content))
+        .forEach(({ path: filePath, content }) => tree.create(filePath, content));
 
     return tree;
 }

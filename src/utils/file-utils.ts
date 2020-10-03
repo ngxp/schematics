@@ -19,5 +19,5 @@ export function readFile(tree: Tree, filePath: string): string {
     }
 
     // tslint:disable-next-line: no-non-null-assertion
-    return tree.read(filePath)!.toString('utf-8')
+    return tree.read(filePath)!.toString('utf-8');
 }

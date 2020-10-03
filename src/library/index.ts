@@ -52,7 +52,7 @@ function updateJsonFile(filePath: string, update: JsonFileUpdater) {
             update(json, tree);
             return json;
         });
-    }
+    };
 }
 
 const getLibraryTestingModuleName = (tree: Tree, projectDirectory: string) => `@${getNpmScope(tree)}/${projectDirectory}/testing`;
