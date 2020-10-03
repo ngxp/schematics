@@ -3,6 +3,7 @@ import { addPackageJsonDependency as addDependency, NodeDependencyType } from '@
 import latestVersion from 'latest-version';
 import { from, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { readJsonFile } from './file-utils';
 
 export function addPackageJsonDependency(packageName: string, type: NodeDependencyType = NodeDependencyType.Default): Rule {
     return (tree: Tree, _context: SchematicContext): Observable<Tree> => {
@@ -16,4 +17,13 @@ export function addPackageJsonDependency(packageName: string, type: NodeDependen
             map(() => tree)
         );
     };
+}
+
+export interface PackageJson {
+    dependencies: { [key: string]: string };
+    devDependencies: { [key: string]: string };
+}
+
+export function readPackageJson(tree: Tree): PackageJson {
+    return readJsonFile(tree, 'package.json');
 }

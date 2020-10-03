@@ -6,7 +6,6 @@ import { NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { isNull, isObject } from 'lodash';
 import { addPackageJsonDependency } from '../utils/package-json-utils';
 
-
 export default function (): Rule {
     return (tree: Tree, context: SchematicContext) => {
         return chain([
@@ -18,8 +17,6 @@ export default function (): Rule {
         ])(tree, context);
     };
 }
-
-
 
 function installDependencies(): Rule {
     return (tree: Tree, context: SchematicContext) => {

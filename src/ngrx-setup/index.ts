@@ -4,7 +4,7 @@ import { isUndefined } from 'lodash';
 import * as path from 'path';
 import { ArrayLiteralExpression, CallExpression, Expression, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
 import { NgrxSchema } from '../ngrx/schema';
-import { getFile } from '../utils/file-utils';
+import { readSourceFile } from '../utils/file-utils';
 import { addPackageJsonDependency } from '../utils/package-json-utils';
 import { NgrxSetupSchema } from './schema';
 
@@ -36,7 +36,7 @@ export default function (options: NgrxSetupSchema): Rule {
         tree => {
             // tslint:disable-next-line: no-non-null-assertion
             const modulePath = options.module!;
-            const moduleFile = getFile(tree, modulePath);
+            const moduleFile = readSourceFile(tree, modulePath);
 
             moduleFile.addImportDeclaration({
                 moduleSpecifier: 'ngrx-store-logger',

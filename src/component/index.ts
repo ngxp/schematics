@@ -1,7 +1,7 @@
 import { chain, externalSchematic, Rule, Tree } from '@angular-devkit/schematics';
 import { isUndefined, omit } from 'lodash';
 import { ClassDeclaration, ObjectLiteralExpression, SourceFile } from 'ts-morph';
-import { getFile } from '../utils/file-utils';
+import { readSourceFile } from '../utils/file-utils';
 import { ComponentSchema } from './schema';
 
 export default function (options: ComponentSchema): Rule {
@@ -18,7 +18,7 @@ export default function (options: ComponentSchema): Rule {
                 return;
             }
 
-            const componentFile = getFile(tree, componentPath);
+            const componentFile = readSourceFile(tree, componentPath);
 
             removeNamedImport(componentFile, '@angular/core', 'OnInit');
 
