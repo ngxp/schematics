@@ -2,14 +2,16 @@ import { Tree } from '@angular-devkit/schematics';
 import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as fs from 'fs';
 import * as path from 'path';
+import { collectionName } from '../collection';
 
 export const sandboxProject = 'sandbox';
+export const sandboxNpmScope = '@sandbox';
 const sandboxPath = path.join(__dirname, '../../sandbox');
 
 export function runSchematic<T>(schematicName: string, options?: T): Promise<Tree> {
     const workspaceTree = createWorkspaceTree(sandboxPath);
     const collectionPath = path.join(__dirname, '../collection.json');
-    const runner = new SchematicTestRunner('@ngxp/schematics', collectionPath);
+    const runner = new SchematicTestRunner(collectionName, collectionPath);
     return runner.runSchematicAsync(schematicName, options, workspaceTree).toPromise();
 }
 

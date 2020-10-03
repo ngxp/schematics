@@ -5,14 +5,14 @@ import { LibrarySchema } from './schema';
 export default function (options: LibrarySchema): Rule {
     const name = toFileName(options.name);
     const projectDirectory = options.directory ? `${toFileName(options.directory)}/${name}` : name;
-    const projectRoot = `libs/${projectDirectory}`;
+    const projectSrcPath = `libs/${projectDirectory}/src`;
 
     return chain([
         externalSchematic('@nrwl/angular', 'library', options),
         mergeWith(
             apply(url('./files'), [
                 template({}),
-                move(projectRoot)
+                move(projectSrcPath)
             ]),
             MergeStrategy.Error
         ),
