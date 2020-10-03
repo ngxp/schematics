@@ -16,21 +16,22 @@
     "license": "MIT",
     "schematics": "./src/collection.json",
     "dependencies": {
-        "@angular-devkit/core": "^9.0.3",
-        "@angular-devkit/schematics": "^9.0.3",
-        "@nrwl/workspace": "9.1.2",
-        "@schematics/angular": "^9.0.3",
+        "@angular-devkit/core": "10.0.8",
+        "@angular-devkit/schematics": "10.0.8",
+        "@nrwl/workspace": "10.2.1",
+        "@schematics/angular": "10.0.8",
         "latest-version": "5.1.0",
-        "lodash": "^4.17.15",
-        "ts-morph": "^7.0.0",
-        "typescript": "~3.7.4"
+        "lodash": "4.17.20",
+        "rxjs": "6.5.5",
+        "ts-morph": "7.3.0",
+        "typescript": "3.9.7"
     },
     "devDependencies": {
-        "@angular-devkit/schematics-cli": "^0.900.3",
-        "@types/jasmine": "~3.5.0",
-        "@types/lodash": "^4.14.149",
-        "@types/node": "^12.11.1",
-        "jasmine": "^3.5.0",
-        "tslint": "^6.1.0"
+        "@angular-devkit/schematics-cli": "0.1000.8",
+        "@types/jasmine": "3.5.14",
+        "@types/lodash": "4.14.161",
+        "@types/node": "12.11.1",
+        "jasmine": "3.6.1",
+        "tslint": "6.1.3"
     }
 }
