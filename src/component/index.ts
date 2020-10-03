@@ -48,9 +48,9 @@ function removeStyles({ name, skipStyles }: ComponentSchema) {
     );
 }
 
-type ComponentUpdater = (componentClass: ClassDeclaration, componentFile: SourceFile, tree: Tree) => void;
+type ComponentFileUpdater = (componentClass: ClassDeclaration, componentFile: SourceFile, tree: Tree) => void;
 
-function updateComponentFile(componentName: string, updater: ComponentUpdater) {
+function updateComponentFile(componentName: string, update: ComponentFileUpdater) {
     return (tree: Tree) => {
         const componentPath = getComponentPath(tree, componentName);
 
@@ -66,7 +66,7 @@ function updateComponentFile(componentName: string, updater: ComponentUpdater) {
             return tree;
         }
 
-        updater(componentClass, componentFile, tree);
+        update(componentClass, componentFile, tree);
 
         const formattedComponentFile = componentFile.print()
             .replace('@Component', '\n@Component');
