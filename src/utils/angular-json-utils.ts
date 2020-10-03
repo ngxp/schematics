@@ -8,5 +8,5 @@ export interface AngularJson {
 }
 
 export function readAngularJson(tree: Tree): AngularJson {
-    return readJsonFile(tree, 'package.json');
+    return readJsonFile(tree, 'angular.json');
 }

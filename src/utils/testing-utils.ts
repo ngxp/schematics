@@ -3,9 +3,11 @@ import { SchematicTestRunner } from '@angular-devkit/schematics/testing';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function runSchematic(schematicName: string, options = {}): Promise<Tree> {
-    const sandboxWorkspacePath = path.join(__dirname, '../../sandbox');
-    const workspaceTree = createWorkspaceTree(sandboxWorkspacePath);
+export const sandboxProject = 'sandbox';
+const sandboxPath = path.join(__dirname, '../../sandbox');
+
+export function runSchematic<T>(schematicName: string, options?: T): Promise<Tree> {
+    const workspaceTree = createWorkspaceTree(sandboxPath);
     const collectionPath = path.join(__dirname, '../collection.json');
     const runner = new SchematicTestRunner('@ngxp/schematics', collectionPath);
     return runner.runSchematicAsync(schematicName, options, workspaceTree).toPromise();
