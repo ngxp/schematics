@@ -25,7 +25,7 @@ export default function (options: LibrarySchema): Rule {
             const { npmScope } = readJsonInTree<NxJson>(host, 'nx.json');
 
             return chain([
-                updateJsonInTree('tsconfig.json', json => {
+                updateJsonInTree('tsconfig.base.json', json => {
                     json.compilerOptions.paths[`@${npmScope}/${projectDirectory}/testing`] = [
                         `libs/${projectDirectory}/src/testing/index.ts`
                     ];
