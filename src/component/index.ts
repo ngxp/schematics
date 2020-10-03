@@ -1,7 +1,7 @@
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { chain, externalSchematic, Rule, Tree } from '@angular-devkit/schematics';
 import { isUndefined, omit } from 'lodash';
-import { SourceFile } from 'ts-morph';
+import { ClassDeclaration, SourceFile } from 'ts-morph';
 import { removeConstructor, removeImplements, removeMethod, removeNamedImport, removePropertyFromDecoratorArg } from '../utils/ast-utils';
 import { readSourceFile } from '../utils/file-utils';
 import { ComponentSchema } from './schema';
@@ -13,39 +13,68 @@ export default function (options: ComponentSchema): Rule {
 
     return chain([
         externalSchematic('@schematics/angular', 'component', omit(options, 'skipStyles')),
-        (tree: Tree) => {
-            const componentPath = getComponentPath(tree, options.name);
+        removeNgOnInit(options),
+        removeComponentConstructor(options),
+        removeStyles(options)
+    ]);
+}
 
-            if (isUndefined(componentPath)) {
-                return;
-            }
-
-            const componentFile = readSourceFile(tree, componentPath);
-            const componentClass = getComponentClass(componentFile);
-
-            if (isUndefined(componentClass)) {
-                console.warn(`${componentFile.getBaseName()} does include a Component class`);
-                return tree;
-            }
-
+function removeNgOnInit({ name }: ComponentSchema) {
+    return updateComponentFile(
+        name,
+        (componentClass, componentFile) => {
             removeNamedImport(componentFile, '@angular/core', 'OnInit');
             removeImplements(componentClass, 'OnInit');
             removeMethod(componentClass, 'ngOnInit');
+        }
+    );
+}
 
-            removeConstructor(componentClass);
+function removeComponentConstructor({ name }: ComponentSchema) {
+    return updateComponentFile(
+        name,
+        (componentClass) => removeConstructor(componentClass)
+    );
+}
 
-            if (options.skipStyles) {
-                removePropertyFromDecoratorArg(componentClass, 'Component', 'styles');
-            }
+function removeStyles({ name, skipStyles }: ComponentSchema) {
+    if (!skipStyles) {
+        return (tree: Tree) => tree;
+    }
 
-            const formattedComponentFile = componentFile.print()
-                .replace('@Component', '\n@Component');
+    return updateComponentFile(
+        name,
+        (componentClass) => removePropertyFromDecoratorArg(componentClass, 'Component', 'styles')
+    );
+}
 
-            tree.overwrite(componentPath, formattedComponentFile);
+type ComponentUpdater = (componentClass: ClassDeclaration, componentFile: SourceFile, tree: Tree) => void;
 
+function updateComponentFile(componentName: string, updater: ComponentUpdater) {
+    return (tree: Tree) => {
+        const componentPath = getComponentPath(tree, componentName);
+
+        if (isUndefined(componentPath)) {
+            return;
+        }
+
+        const componentFile = readSourceFile(tree, componentPath);
+        const componentClass = getComponentClass(componentFile);
+
+        if (isUndefined(componentClass)) {
+            console.warn(`${componentFile.getBaseName()} does include a Component class`);
             return tree;
         }
-    ]);
+
+        updater(componentClass, componentFile, tree);
+
+        const formattedComponentFile = componentFile.print()
+            .replace('@Component', '\n@Component');
+
+        tree.overwrite(componentPath, formattedComponentFile);
+
+        return tree;
+    }
 }
 
 function getComponentPath(tree: Tree, componentName: string) {
