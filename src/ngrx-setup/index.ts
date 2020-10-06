@@ -1,41 +1,41 @@
-import { chain, externalSchematic, Rule } from '@angular-devkit/schematics';
-import { readWorkspaceJson, updateJsonInTree } from '@nrwl/workspace';
-import { isUndefined } from 'lodash';
-import * as path from 'path';
+import { chain, externalSchematic, noop, Rule, Tree } from '@angular-devkit/schematics';
+import { NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { ArrayLiteralExpression, CallExpression, Expression, ObjectLiteralExpression, PropertyAssignment } from 'ts-morph';
-import { NgrxSchema } from '../ngrx/schema';
 import { readSourceFile } from '../utils/file-utils';
 import { addPackageJsonDependency } from '../utils/package-json-utils';
 import { NgrxSetupSchema } from './schema';
 
-export default function (options: NgrxSetupSchema): Rule {
+export default function ({ module, skipComponentStore, skipRouterStore }: NgrxSetupSchema): Rule {
     return chain([
-        (tree, context) => {
-            if (isUndefined(options.module)) {
-                const workspace = readWorkspaceJson();
-                const appSourceRoot = workspace.projects[workspace.defaultProject].sourceRoot;
-                options.module = path.join(appSourceRoot, 'app/app.module.ts');
-            }
-
-            const ngrxSchematicOptions: NgrxSchema = {
-                module: options.module,
-                skipFormat: options.skipFormat,
-                skipPackageJson: options.skipPackageJson,
-                root: true,
-                name: 'root',
-                facade: false
-            };
-
-            return externalSchematic('@nrwl/angular', 'ngrx', ngrxSchematicOptions)(tree, context);
-        },
-        updateJsonInTree('package.json', json => {
-            delete json.dependencies['@ngrx/entity'];
-            return json;
+        addPackageJsonDependency('@ngrx/schematics', NodeDependencyType.Dev),
+        addPackageJsonDependency('@ngrx/store-devtools', NodeDependencyType.Dev),
+        addPackageJsonDependency('@ngrx/store'),
+        addPackageJsonDependency('@ngrx/effects'),
+        skipRouterStore ? noop : addPackageJsonDependency('@ngrx/router-store'),
+        skipComponentStore ? noop : addPackageJsonDependency('@ngrx/component-store'),
+        externalSchematic('@ngrx/schematics', 'store', {
+            name: 'app',
+            module,
+            root: true,
+            minimal: true
         }),
+        externalSchematic('@ngrx/schematics', 'effect', {
+            name: 'app',
+            module,
+            root: true,
+            minimal: true,
+            api: false,
+            creators: true
+        }),
+        skipRouterStore ? noop : externalSchematic('@ngrx/router-store', 'ng-add', {
+            skipPackageJson: true,
+            module
+        }),
+
         addPackageJsonDependency('ngrx-store-logger'),
-        tree => {
+        (tree: Tree) => {
             // tslint:disable-next-line: no-non-null-assertion
-            const modulePath = options.module!;
+            const modulePath = tree.actions.find(a => a.path.endsWith(module!))!.path;
             const moduleFile = readSourceFile(tree, modulePath);
 
             moduleFile.addImportDeclaration({
@@ -57,6 +57,11 @@ export default function (options: NgrxSetupSchema): Rule {
 
             const ngrxStoreConfig = arg0.getArguments()[1] as ObjectLiteralExpression;
 
+            ngrxStoreConfig.addProperty({
+                name: 'metaReducers',
+                initializer: 'environment.production ? [] : [reducer => storeLogger()(reducer)]'
+            })
+
             // tslint:disable-next-line: no-non-null-assertion
             ngrxStoreConfig.getProperty('metaReducers')!.set({
                 initializer: 'environment.production ? [] : [reducer => storeLogger()(reducer)]'
@@ -64,18 +69,20 @@ export default function (options: NgrxSetupSchema): Rule {
 
             // tslint:disable-next-line: no-non-null-assertion
             ngrxStoreConfig.getProperty('runtimeChecks')!.set({
-                initializer: `{
+                initializer: JSON.stringify({
+                    strictStateSerializability: true,
                     strictActionSerializability: true,
                     strictActionWithinNgZone: true,
-                    strictStateSerializability: true
-                }`
-            })
-
+                    strictActionTypeUniqueness: true
+                })
+            });
 
             const formattedModuleFile = moduleFile.print()
                 .replace('@NgModule', '\n@NgModule');
 
             tree.overwrite(modulePath, formattedModuleFile);
+
+            return tree;
         }
     ]);
 }
