@@ -1,12 +1,11 @@
 import { JsonObject } from '@angular-devkit/core';
 import { chain, Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
-import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { updateJsonInTree, updateWorkspace } from '@nrwl/workspace';
 import { NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import { isNull, isObject } from 'lodash';
 import { collectionName } from '../collection';
 import { StyleExt } from '../utils/angular-json-utils';
-import { addPackageJsonDependency } from '../utils/package-json-utils';
+import { addPackageJsonDependency, installDependencies } from '../utils/package-json-utils';
 
 export default function (): Rule {
     return (tree: Tree, context: SchematicContext) => {
@@ -18,13 +17,6 @@ export default function (): Rule {
             setDefaultStyleExtension('scss'),
             installDependencies(),
         ])(tree, context);
-    };
-}
-
-function installDependencies(): Rule {
-    return (tree: Tree, context: SchematicContext) => {
-        context.addTask(new NodePackageInstallTask());
-        return tree;
     };
 }
 

@@ -1,8 +1,13 @@
 import { Tree } from '@angular-devkit/schematics';
-import { Project, SourceFile } from 'ts-morph';
+import { IndentationText, Project, QuoteKind, SourceFile } from 'ts-morph';
 
 export function readSourceFile(tree: Tree, filePath: string): SourceFile {
-    return new Project().createSourceFile(
+    return new Project({
+        manipulationSettings: {
+            indentationText: IndentationText.FourSpaces,
+            quoteKind: QuoteKind.Single
+        },
+    }).createSourceFile(
         filePath,
         readFile(tree, filePath),
         { overwrite: true }

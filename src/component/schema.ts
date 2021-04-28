@@ -17,6 +17,5 @@ export interface ComponentSchema {
     skipSelector?: boolean;
     module?: string;
     export?: boolean;
-    entryComponent?: boolean;
     lintFix?: boolean;
 }

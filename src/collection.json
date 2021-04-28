@@ -30,8 +30,20 @@
         },
         "ngrx-setup": {
             "factory": "./ngrx-setup",
-            "description": "Add an ngrx config to a project.",
+            "description": "Add NgRx to a project.",
             "schema": "./ngrx-setup/schema.json"
+        },
+        "ngrx-setup-install-dependencies": {
+            "factory": "./ngrx-setup#installDependencies",
+            "description": "Install NgRx dependencies.",
+            "schema": "./ngrx-setup/schema.json",
+            "private": true
+        },
+        "ngrx-setup-apply-configuration": {
+            "factory": "./ngrx-setup#applyConfiguration",
+            "description": "Configure NgRx in a project.",
+            "schema": "./ngrx-setup/schema.json",
+            "private": true
         },
         "ngrx": {
             "factory": "./ngrx",

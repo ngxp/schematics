@@ -5,17 +5,23 @@
     "properties": {
         "module": {
             "type": "string",
+            "default": "app.module.ts",
             "description": "The path to NgModule where the feature state will be registered. The host directory will create/use the new state directory."
         },
-        "skipFormat": {
-            "description": "Skip formatting of generated files.",
-            "type": "boolean",
-            "default": false
-        },
-        "skipPackageJson": {
+        "skipRouterStore": {
             "type": "boolean",
             "default": false,
-            "description": "Do not update the package.json with NgRx dependencies."
+            "description": "Do not add @ngrx/router-store to dependencies in package.json."
+        },
+        "skipComponentStore": {
+            "type": "boolean",
+            "default": false,
+            "description": "Do not add @ngrx/component-store to dependencies in package.json."
+        },
+        "skipStoreLogger": {
+            "type": "boolean",
+            "default": false,
+            "description": "Do not add @ngrx-store-logger to dependencies in package.json."
         }
     }
 }

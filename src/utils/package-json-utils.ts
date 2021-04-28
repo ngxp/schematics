@@ -1,4 +1,5 @@
 import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
+import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addPackageJsonDependency as addDependency, NodeDependencyType } from '@schematics/angular/utility/dependencies';
 import latestVersion from 'latest-version';
 import { from, Observable } from 'rxjs';
@@ -16,6 +17,13 @@ export function addPackageJsonDependency(packageName: string, type: NodeDependen
             })),
             map(() => tree)
         );
+    };
+}
+
+export function installDependencies(): Rule {
+    return (tree: Tree, context: SchematicContext) => {
+        context.addTask(new NodePackageInstallTask());
+        return tree;
     };
 }
 

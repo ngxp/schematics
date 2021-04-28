@@ -1,6 +1,6 @@
 import { dasherize } from '@angular-devkit/core/src/utils/strings';
-import { getClass, hasDecoratorProperty, hasImport, implementsInterface } from '../utils/ast-utils';
 import { readSourceFile } from '../utils/file-utils';
+import { getClass, hasDecoratorProperty, hasImport, implementsInterface } from '../utils/testing-ast-utils';
 import { runSchematic, sandboxProject } from '../utils/testing-utils';
 import { ComponentSchema } from './schema';
 
@@ -25,7 +25,6 @@ describe('component', () => {
         expect(tree.exists(componentHtmlFilePath)).toBeTrue();
         expect(tree.exists(componentSpecFilePath)).toBeTrue();
         expect(tree.exists(componentTsFilePath)).toBeTrue();
-        expect(tree.exists(componentCssFilePath)).toBeTrue();
     });
 
     it('removes the NgOnInit lifecycle hook', async () => {
@@ -48,27 +47,52 @@ describe('component', () => {
         expect(componentClass.getConstructors().length).toBe(0);
     });
 
-    describe('skipStyles', () => {
-        it('removes the styles and styleUrls Component decorator properties', async () => {
+    it('removes the styles and styleUrls Component decorator properties', async () => {
+        const tree = await runSchematic('component', options);
+
+        const componentFile = readSourceFile(tree, componentTsFilePath);
+        const componentClass = getClass(componentFile, componentName);
+
+        expect(hasDecoratorProperty(componentClass, 'Component', 'styles')).toBeFalse();
+        expect(hasDecoratorProperty(componentClass, 'Component', 'styleUrls')).toBeFalse();
+    });
+
+    it('does not generate a stylesheet file', async () => {
+        const tree = await runSchematic('component', options);
+
+        expect(tree.exists(componentCssFilePath)).toBeFalse();
+    });
+
+    describe('skipStyles: false', () => {
+        it('generates a stylesheet file', async () => {
             const tree = await runSchematic('component', {
                 ...options,
-                skipStyles: true
+                skipStyles: false
             });
 
             const componentFile = readSourceFile(tree, componentTsFilePath);
             const componentClass = getClass(componentFile, componentName);
 
+            expect(tree.exists(componentCssFilePath)).toBeTrue();
             expect(hasDecoratorProperty(componentClass, 'Component', 'styles')).toBeFalse();
-            expect(hasDecoratorProperty(componentClass, 'Component', 'styleUrls')).toBeFalse();
+            expect(hasDecoratorProperty(componentClass, 'Component', 'styleUrls')).toBeTrue();
         });
+    });
 
-        it('does not generate a stylesheet file', async () => {
+    describe('skipStyles: false, inlineStyle: true', () => {
+        it('adds the styles Component decorator property', async () => {
             const tree = await runSchematic('component', {
                 ...options,
-                skipStyles: true
+                skipStyles: false,
+                inlineStyle: true
             });
 
+            const componentFile = readSourceFile(tree, componentTsFilePath);
+            const componentClass = getClass(componentFile, componentName);
+
             expect(tree.exists(componentCssFilePath)).toBeFalse();
+            expect(hasDecoratorProperty(componentClass, 'Component', 'styles')).toBeTrue();
+            expect(hasDecoratorProperty(componentClass, 'Component', 'styleUrls')).toBeFalse();
         });
     });
 });

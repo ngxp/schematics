@@ -8,8 +8,8 @@ describe('ng-add', () => {
     it('adds @ngxp/builder as a dev dependency', async () => {
         const tree = await runSchematic('ng-add');
 
-        const packageJson = readPackageJson(tree);
-        expect(packageJson.devDependencies['@ngxp/builder']).toBeDefined();
+        const { devDependencies } = readPackageJson(tree);
+        expect(devDependencies['@ngxp/builder']).toBeDefined();
     });
 
     it('sets the indent_size in .editorconfig to 4', async () => {
@@ -22,8 +22,8 @@ describe('ng-add', () => {
     it('removes prettier', async () => {
         const tree = await runSchematic('ng-add');
 
-        const packageJson = readPackageJson(tree);
-        expect(packageJson.devDependencies.prettier).not.toBeDefined();
+        const { devDependencies } = readPackageJson(tree);
+        expect(devDependencies.prettier).not.toBeDefined();
         expect(tree.exists('.prettierignore')).toBeFalse();
         expect(tree.exists('.prettierrc')).toBeFalse();
     });

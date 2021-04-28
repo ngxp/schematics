@@ -1,13 +1,16 @@
 import { isUndefined } from 'lodash';
 import { ClassDeclaration, ObjectLiteralExpression, SourceFile } from 'ts-morph';
+import { IndentStyle, SemicolonPreference } from 'typescript';
 
-export function getClass(sourceFile: SourceFile, className: string): ClassDeclaration {
-    // tslint:disable-next-line: no-non-null-assertion
-    return sourceFile.getClass(className)!;
-}
+export function formatSourceFile(sourceFile: SourceFile): void {
+    sourceFile.formatText({
+        ensureNewLineAtEndOfFile: true,
+        indentMultiLineObjectLiteralBeginningOnBlankLine: true,
+        indentStyle: IndentStyle.Smart,
+        semicolons: SemicolonPreference.Insert
+    });
 
-export function implementsInterface(classDeclaration: ClassDeclaration, interfaceName: string) {
-    return classDeclaration.getImplements().some(impl => impl.getText() === interfaceName);
+    sourceFile.organizeImports();
 }
 
 export function removeNamedImport(file: SourceFile, moduleSpecifier: string, namedImport: string) {
@@ -40,13 +43,6 @@ export function removeImplements(cls: ClassDeclaration, implText: string) {
     cls.removeImplements(implementsIndex);
 }
 
-export function hasImport(sourceFile: SourceFile, moduleSpecifier: string, namedImport: string) {
-    // tslint:disable-next-line: no-non-null-assertion
-    return sourceFile
-        .getImportDeclaration(moduleSpecifier)!
-        .getNamedImports().some(imp => imp.getText() === namedImport);
-}
-
 export function removeConstructor(cls: ClassDeclaration) {
     cls.getConstructors().forEach(constructor => constructor.remove());
 }
@@ -60,14 +56,6 @@ export function removeMethod(cls: ClassDeclaration, methodName: string) {
     }
 
     method.remove();
-}
-
-export function hasDecoratorProperty(cls: ClassDeclaration, decoratorName: string, propertyName: string) {
-    // tslint:disable-next-line: no-non-null-assertion
-    const decoratorArg = cls
-        .getDecorator(decoratorName)!
-        .getArguments()[0] as ObjectLiteralExpression;
-    return !isUndefined(decoratorArg.getProperty(propertyName));
 }
 
 export function removePropertyFromDecoratorArg(cls: ClassDeclaration, decoratorName: string, propertyName: string) {

@@ -2,7 +2,7 @@ import { dasherize } from '@angular-devkit/core/src/utils/strings';
 import { chain, externalSchematic, Rule, Tree } from '@angular-devkit/schematics';
 import { isUndefined, omit } from 'lodash';
 import { ClassDeclaration, SourceFile } from 'ts-morph';
-import { removeConstructor, removeImplements, removeMethod, removeNamedImport, removePropertyFromDecoratorArg } from '../utils/ast-utils';
+import { formatSourceFile, removeConstructor, removeImplements, removeMethod, removeNamedImport, removePropertyFromDecoratorArg } from '../utils/ast-utils';
 import { readSourceFile } from '../utils/file-utils';
 import { ComponentSchema } from './schema';
 
@@ -68,10 +68,9 @@ function updateComponentFile(componentName: string, update: ComponentFileUpdater
 
         update(componentClass, componentFile, tree);
 
-        const formattedComponentFile = componentFile.print()
-            .replace('@Component', '\n@Component');
+        formatSourceFile(componentFile);
 
-        tree.overwrite(componentPath, formattedComponentFile);
+        tree.overwrite(componentPath, componentFile.getFullText());
 
         return tree;
     };

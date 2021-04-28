@@ -96,7 +96,7 @@
         "skipStyles": {
             "type": "boolean",
             "description": "When true, does not create stylesheet files for the new component and does not include styles inline in the component.ts file.",
-            "default": false
+            "default": true
         },
         "skipTests": {
             "type": "boolean",
@@ -135,12 +135,6 @@
             "default": false,
             "description": "When true, the declaring NgModule exports this component.",
             "x-user-analytics": 19
-        },
-        "entryComponent": {
-            "type": "boolean",
-            "default": false,
-            "description": "When true, the new component is the entry component of the declaring NgModule.",
-            "x-deprecated": "Since version 9.0.0 with Ivy, entryComponents is no longer necessary."
         },
         "lintFix": {
             "type": "boolean",
