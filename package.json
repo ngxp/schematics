@@ -22,7 +22,7 @@
         "@nrwl/workspace": "10.2.1",
         "@schematics/angular": "10.0.8",
         "latest-version": "5.1.0",
-        "lodash": "4.17.20",
+        "lodash": "4.17.21",
         "rxjs": "6.5.5",
         "ts-morph": "7.3.0",
         "typescript": "3.9.7"
